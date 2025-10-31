@@ -1,7 +1,7 @@
 // frontend/app/corruption/page.js
 'use client';
-import LiveFeed from '@/components/LiveFeed';
-import FilterBar from '@/components/FilterBar';
+import LiveFeed from '../components/LiveFeed';
+import FilterBar from '../components/FilterBar';
 
 export default function CorruptionPage() {
   return (
