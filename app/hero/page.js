@@ -1,7 +1,6 @@
-// frontend/app/hero/page.js
 'use client';
-import LiveFeed from '@/components/LiveFeed';
-import FilterBar from '@/components/FilterBar';
+import LiveFeed from '@/components/LiveFeed.jsx';
+import FilterBar from '@/components/FilterBar.jsx';
 
 export default function HeroPage() {
   return (
@@ -14,7 +13,7 @@ export default function HeroPage() {
           Real-time updates of inspiring acts from across India
         </p>
       </div>
-      
+
       <FilterBar feedType="hero" />
       <LiveFeed feedType="hero" />
     </div>
