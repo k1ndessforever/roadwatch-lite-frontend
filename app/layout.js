@@ -1,6 +1,6 @@
 // frontend/app/layout.js
 import './globals.css';
-import Header from '@/components/Header';
+import Header from '@/components/Header.jsx';
 
 export const metadata = {
   title: 'RoadWatch Lite - Transparency Platform',
