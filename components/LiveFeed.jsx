@@ -1,57 +1,30 @@
-// frontend/components/LiveFeed.jsx
 'use client';
+
 import { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-import ReportCard from './ReportCard';
 
 export default function LiveFeed({ feedType }) {
   const [reports, setReports] = useState([]);
-  const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch initial reports
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/reports/feed/${feedType}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setReports(data.reports);
-        }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error fetching reports:', err);
-        setLoading(false);
-      });
-
-    // Connect to WebSocket
-    const newSocket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
-    newSocket.emit('subscribe:feed', feedType);
-    
-    newSocket.on('update:feed', (newReport) => {
-      setReports(prev => [newReport, ...prev].slice(0, 50));
-    });
-    
-    newSocket.on('appreciation:update', ({ reportId, count }) => {
-      setReports(prev => prev.map(report => 
-        report.id === reportId 
-          ? { ...report, appreciation_count: count }
-          : report
-      ));
-    });
-    
-    setSocket(newSocket);
-    
-    return () => {
-      newSocket.emit('unsubscribe:feed', feedType);
-      newSocket.close();
-    };
+    setLoading(true);
+    setTimeout(() => {
+      setReports([
+        {
+          id: 1,
+          title: 'Sample Report',
+          description: 'This is a sample report entry',
+          date: new Date().toLocaleDateString(),
+        },
+      ]);
+      setLoading(false);
+    }, 1000);
   }, [feedType]);
 
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <div className="inline-block w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -59,10 +32,16 @@ export default function LiveFeed({ feedType }) {
   return (
     <div className="space-y-4">
       {reports.length === 0 ? (
-        <p className="text-center text-gray-500 py-12">No reports yet</p>
+        <div className="text-center py-12 bg-gray-100 rounded-lg">
+          <p className="text-gray-600 text-lg">No reports yet. Be the first to share!</p>
+        </div>
       ) : (
-        reports.map(report => (
-          <ReportCard key={report.id} report={report} />
+        reports.map((report) => (
+          <div key={report.id} className="bg-white rounded-lg p-6 card-shadow hover:shadow-2xl transition">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{report.title}</h3>
+            <p className="text-gray-700 mb-3">{report.description}</p>
+            <p className="text-sm text-gray-500">{report.date}</p>
+          </div>
         ))
       )}
     </div>
